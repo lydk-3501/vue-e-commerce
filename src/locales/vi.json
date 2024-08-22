@@ -1,5 +1,19 @@
 {
-    "welcome": "Chào mừng",
-    "greeting": "Xin chào, bạn khỏe không?"
-  }
-  
+    "specificKey": "Bản dịch",
+    "headerTitle": "Tìm kiếm dễ dàng hơn bao giờ hết.",
+    "headerLogoLabel": "Chuuyển sang Algolia website",
+    "searchPlaceholder": " Sản phẩm, thương hiệu, màu sắc...",
+    "categoryMenuHeader": "Phân loại",
+    "clearFilter": "Xoá bộ lọc",
+    "containerHeader": "Bộ lọc",
+    "brandMenuHeader": "Thương hiệu",
+    "brandSearchPlaceholder": "Tìm kiếm thương hiệu",
+    "toggleIconAlt": "Thêm",
+    "sliderHeader": "Mức giá",
+    "freeshippingHeader": "Miễn phí giao hàng",
+    "freeshippingToggleLabel": "Chỉ hiển thị những sản phẩm được miễn phí giao hàng",
+    "ratingHeader": "Đánh giá",
+    "hitsPerPages": " sản phẩm /trang",
+    "yes": "Có",
+    "no": "Không"
+}
