@@ -1,5 +1,19 @@
 {
-    "welcome": "Welcome",
-    "greeting": "Hello, how are you?"
-  }
-  
+    "specificKey": "Translated Value",
+    "headerTitle": "Stop looking for an item — find it.",
+    "headerLogoLabel": "Go to the Algolia website",
+    "searchPlaceholder": " Product, brand, color,...",
+    "categoryMenuHeader": "Category",
+    "clearFilter": "Clear Filter",
+    "containerHeader": "Filters",
+    "brandMenuHeader": "Brands",
+    "brandSearchPlaceholder": "Search for brand",
+    "toggleIconAlt": "More",
+    "sliderHeader": "Price",
+    "freeshippingHeader": "Free Shipping",
+    "freeshippingToggleLabel": "Display only items with free shipping",
+    "ratingHeader": "Ratings",
+    "hitsPerPages": "hits per pages",
+    "yes": "Yes",
+    "no": "No"
+}
