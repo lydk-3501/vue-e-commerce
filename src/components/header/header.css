@@ -1,7 +1,7 @@
 .header {
-    background-image: url('../../../public/images/cover.c5eecd4b.png');
+    background-image: url('../../../images/cover.c5eecd4b.png');
 }
-  
+
 @media (max-width: 1024px) {
     .header {
         background-image: url('../../../images/cover-mobile.008f260d.png');
