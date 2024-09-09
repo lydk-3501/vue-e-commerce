@@ -4,11 +4,13 @@ import { defineComponent, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import AlgoliaIcon from '../icons/IconAlgolia.vue'
 import SearchItems from '../search/SearchItems.vue'
+import SearchIcon from '../icons/IconSearch.vue'
 
 export default defineComponent({
     components: {
         AlgoliaIcon,
-        SearchItems
+        SearchItems,
+        SearchIcon
     },
     setup() {
         const { t } = useI18n()
@@ -36,7 +38,17 @@ export default defineComponent({
             {{ $t('headerTitle') }}
         </p>
         <div class="search-box h-16 w-4/5 max-w-[740px] relative">
-            <SearchItems :searchQuery="searchQuery" :placeholder="placeholder" />
+            <form
+                class="search-box-form flex flex-col bg-white h-16 rounded-lg align-middle static"
+            >
+                <SearchItems :searchQuery="searchQuery" :placeholder="placeholder" />
+                <button
+                    class="search-box-submit absolute h-16 text-search-icon text-xl pl-4 pr-4 text-yellow-500"
+                    type="submit"
+                >
+                    <SearchIcon />
+                </button>
+            </form>
         </div>
     </header>
 </template>
