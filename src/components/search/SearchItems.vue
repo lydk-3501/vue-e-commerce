@@ -1,8 +1,12 @@
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import SearchIcon from '../icons/IconSearch.vue'
 
 export default defineComponent({
+    components: {
+        SearchIcon
+    },
     props: {
         inputClass: {
             type: String,
@@ -31,13 +35,9 @@ export default defineComponent({
         spellCheck: {
             type: Boolean,
             default: false
-        },
-        updateUrl: {
-            type: Boolean,
-            default: true
         }
     },
-    setup(props) {
+    setup() {
         const searchQuery = ref('')
         const router = useRouter()
         let debounceTimeout: ReturnType<typeof setTimeout>
@@ -45,18 +45,15 @@ export default defineComponent({
         watch(searchQuery, (newQuery) => {
             if (debounceTimeout) clearTimeout(debounceTimeout)
             debounceTimeout = setTimeout(() => {
-                if (props.updateUrl) {
-                    updateSearchParams(newQuery)
-                }
+                updateSearchParams(newQuery)
             }, 300)
         })
 
         const updateSearchParams = (query: string) => {
-            if (query) {
+            if (query)
                 router.push({
                     query: { q: query }
                 })
-            }
         }
 
         return {
@@ -67,15 +64,23 @@ export default defineComponent({
 </script>
 
 <template>
-    <input
-        v-model="searchQuery"
-        :class="inputClass"
-        :maxLength="maxLength"
-        :placeholder="placeholder"
-        :autoCapitalize="autoCapitalize"
-        :autoComplete="autoComplete"
-        :autoCorrect="autoCorrect"
-        :spellCheck="spellCheck"
-        type="search"
-    />
+    <form class="search-box-form flex flex-col bg-white h-16 rounded-lg align-middle static">
+        <input
+            v-model="searchQuery"
+            :class="inputClass"
+            :maxLength="maxLength"
+            :placeholder="placeholder"
+            :autoCapitalize="autoCapitalize"
+            :autoComplete="autoComplete"
+            :autoCorrect="autoCorrect"
+            :spellCheck="spellCheck"
+            type="search"
+        />
+        <button
+            class="search-box-submit absolute h-16 text-search-icon text-xl pl-4 pr-4 text-yellow-500"
+            type="submit"
+        >
+            <SearchIcon />
+        </button>
+    </form>
 </template>
