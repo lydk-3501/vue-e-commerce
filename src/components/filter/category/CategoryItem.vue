@@ -14,7 +14,7 @@ export default defineComponent({
         parentActiveMenu: {
             type: Function,
             default: () => {}
-        },
+        }
     },
     setup(props) {
         const route = useRoute()
@@ -28,7 +28,7 @@ export default defineComponent({
 
         const toggleMenu = () => {
             isSelected.value = !isSelected.value
-            props.parentActiveMenu(isSelected.value)
+            props.parentActiveMenu()
             updateUrlParams(isSelected.value)
         }
 
