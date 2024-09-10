@@ -1,8 +1,23 @@
 import axios from 'axios'
 
-interface Product {
+export interface Product {
     name: string
     brand: string
+    description: string
+    categories: string[]
+    hierarchicalCategories: {
+        lvl0: string[]
+        lvl1: string[]
+    }
+    type: string
+    price: number
+    price_range: string
+    image: string
+    url: string
+    free_shipping: boolean
+    popularity: number
+    rating: number
+    objectID: string
 }
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL

@@ -2,15 +2,11 @@
 import { defineComponent, ref, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import axios from 'axios'
 import { fetchProducts } from '@/api/api'
 import BrandItem from './BrandItem.vue'
 import SearchItems from '@/components/search/SearchItems.vue'
 import SearchIcon from '@/components/icons/IconSearch.vue'
-interface Product {
-    brand: string
-    // Add other fields if needed
-}
+
 export default defineComponent({
     name: 'BrandList',
     components: {
