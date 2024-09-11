@@ -105,7 +105,7 @@ export default defineComponent({
     <div class="brand-menu border-t py-8 w-[260px]">
         <div>
             <h2
-                class="brand-menu-header leading-normal font-semibold font-hind pb-4 text-[0.678rem] text-[#21243d] tracking-[.08rem] uppercase"
+                class="brand-menu-header leading-normal font-semibold font-hind pb-4 text-[0.678rem] text-title tracking-[.08rem] uppercase"
             >
                 {{ t('brandMenuHeader') }}
             </h2>
