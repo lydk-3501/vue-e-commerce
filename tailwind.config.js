@@ -6,6 +6,9 @@ export default {
     extend: {
       fontFamily: {
         'hind': 'Hind, sans-serif',
+      },
+      colors: {
+        'title': '#21243d'
       }
     },
   },

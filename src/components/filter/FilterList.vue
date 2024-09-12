@@ -2,11 +2,17 @@
 import { defineComponent } from 'vue'
 import CategoryList from './category/CategoryList.vue'
 import BrandList from './brand/BrandList.vue'
+import FreeShipping from './freeshipping/FreeShipping.vue'
+import RatingFilter from './ratings/RatingFilter.vue'
+import PriceSlider from './priceslider/PriceSlider.vue'
 
 export default defineComponent({
     components: {
         CategoryList,
-        BrandList
+        BrandList,
+        FreeShipping,
+        RatingFilter,
+        PriceSlider
     },
     setup() {
         return {}
@@ -25,6 +31,9 @@ export default defineComponent({
             <div className="filter-body">
                 <CategoryList />
                 <BrandList />
+                <PriceSlider />
+                <FreeShipping />
+                <RatingFilter />
             </div>
         </section>
     </div>

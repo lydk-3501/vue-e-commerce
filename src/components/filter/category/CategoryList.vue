@@ -18,7 +18,7 @@ export default defineComponent({
 <template>
     <div class="flex flex-col border-t py-8 w-[260px]">
         <h2
-            class="category-menu-header font-hind font-semibold uppercase text-[0.678rem] text-[#21243d] pb-4 tracking-[.08rem]"
+            class="category-menu-header font-hind font-semibold uppercase text-[0.678rem] text-title pb-4 tracking-[.08rem]"
         >
             {{ $t('categoryMenuHeader') }}
         </h2>
