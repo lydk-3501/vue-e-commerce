@@ -1,9 +1,10 @@
 <script lang="ts">
-import { defineComponent, ref, watch, onMounted } from 'vue'
+import { defineComponent, ref, watch, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { fetchProducts } from '@/api/api'
 import StarIcon from '@/components/icons/IconStar.vue'
+import { useFilterStore } from '@/components/store/store'
 
 export default defineComponent({
     name: 'RatingFilter',
@@ -14,8 +15,8 @@ export default defineComponent({
         const { t } = useI18n()
         const route = useRoute()
         const router = useRouter()
-        const ratingNumbers = [1, 2, 3, 4]
-        const selectedRating = ref<number | null>(null)
+        const filterStore = useFilterStore()
+        const ratingNumbers = [1, 2, 3, 4, 5]
         const ratingCounts = ref<Record<number, number>>({
             1: 0,
             2: 0,
@@ -24,10 +25,12 @@ export default defineComponent({
             5: 0
         })
 
+        const selectedRating = computed(()=> filterStore.$state.selectedRating)
+
         watch(
             () => route.query.rating,
             (newRating) => {
-                selectedRating.value = newRating ? Number(newRating) : null
+                filterStore.setSelectedRating(newRating ? Number(newRating) : null)
             },
             { immediate: true }
         )
@@ -35,7 +38,7 @@ export default defineComponent({
         const handleRatingSelect = (rating: number) => {
             const query = {
                 ...route.query,
-                rating: rating !== selectedRating.value ? rating : undefined
+                rating: rating !== filterStore.selectedRating ? rating : undefined
             }
             router.push({ query }).catch(() => {})
         }

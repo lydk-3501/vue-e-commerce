@@ -6,6 +6,7 @@ import { fetchProducts } from '@/api/api'
 import BrandItem from './BrandItem.vue'
 import SearchItems from '@/components/search/SearchItems.vue'
 import SearchIcon from '@/components/icons/IconSearch.vue'
+import { useFilterStore } from '@/components/store/store'
 
 export default defineComponent({
     name: 'BrandList',
@@ -16,13 +17,14 @@ export default defineComponent({
     },
     setup() {
         const { t } = useI18n()
+        const filterStore = useFilterStore()
+        const route = useRoute()
+        const router = useRouter()
         const brandCounts = ref<{ [key: string]: number }>({})
         const brandItems = ref<string[]>([])
         const placeholder = ref(t('brandSearchPlaceholder'))
         const searchQuery = ref('')
-        const selectedBrands = ref<string[]>([])
-        const router = useRouter()
-        const route = useRoute()
+        const selectedBrands = computed(() => filterStore.$state.selectedBrands)
 
         const filteredBrands = computed(() => {
             const query = searchQuery.value.toLowerCase()
@@ -46,7 +48,7 @@ export default defineComponent({
                 }
             })
 
-            selectedBrands.value.forEach((brand, index) => {
+            filterStore.selectedBrands.forEach((brand, index) => {
                 query[`brand[${index + 1}]`] = brand
             })
 
@@ -54,14 +56,12 @@ export default defineComponent({
         }
 
         const addBrand = (brand: string) => {
-            if (!selectedBrands.value.includes(brand)) {
-                selectedBrands.value.push(brand)
-                updateURL()
-            }
+            filterStore.addBrand(brand)
+            updateURL()
         }
 
         const removeBrand = (brand: string) => {
-            selectedBrands.value = selectedBrands.value.filter((item) => item !== brand)
+            filterStore.removeBrand(brand)
             updateURL()
         }
 
@@ -93,9 +93,9 @@ export default defineComponent({
             brandCounts,
             placeholder,
             searchQuery,
-            selectedBrands,
             addBrand,
-            removeBrand
+            removeBrand,
+            selectedBrands
         }
     }
 })

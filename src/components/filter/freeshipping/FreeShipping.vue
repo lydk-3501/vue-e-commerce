@@ -1,26 +1,26 @@
 <script lang="ts">
-import { defineComponent, ref, watch } from 'vue'
+import { defineComponent, watch, onMounted, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
+import { useFilterStore } from '@/components/store/store';
 
 export default defineComponent({
     name: 'FreeShipping',
     setup() {
         const { t } = useI18n()
-        const isFreeShipping = ref(false)
-
         const route = useRoute()
         const router = useRouter()
+        const isFreeShipping = computed(() => filterStore.$state.isFreeShipping)
 
-        if (route.query.freeShipping === 'true') {
-            isFreeShipping.value = true
-        }
+        const filterStore = useFilterStore()
 
-        const handleToggle = () => {
-            isFreeShipping.value = !isFreeShipping.value
-        }
+        onMounted(() => {
+            if (route.query.freeShipping === 'true') {
+                filterStore.isFreeShipping = true
+            }
+        })
 
-        watch(isFreeShipping, (newValue) => {
+        watch(() => filterStore.isFreeShipping, (newValue) => {
             const query = { ...route.query }
             if (newValue) {
                 query.freeShipping = 'true'
@@ -29,6 +29,10 @@ export default defineComponent({
             }
             router.push({ query })
         })
+
+        const handleToggle = () => {
+            filterStore.toggleFreeShipping()           
+        }
 
         return {
             t,

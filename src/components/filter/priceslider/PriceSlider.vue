@@ -1,8 +1,9 @@
 <script lang="ts">
-import { defineComponent, ref, computed, watch } from 'vue'
+import { defineComponent, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { debounce } from '@/utils/debounce'
+import { useFilterStore } from '@/components/store/store'
 
 export default defineComponent({
     name: 'PriceRangeSlider',
@@ -14,11 +15,9 @@ export default defineComponent({
         const { t } = useI18n()
         const route = useRoute()
         const router = useRouter()
+        const filterStore = useFilterStore()
 
-        const values = ref<number[]>([
-            Number(route.query.priceMin) || props.min,
-            Number(route.query.priceMax) || props.max
-        ])
+        const values = computed(() => [filterStore.$state.priceMin, filterStore.$state.priceMax])
 
         const trackStyle = computed(() => {
             const minPos = ((values.value[0] - props.min) / (props.max - props.min)) * 100
@@ -42,12 +41,13 @@ export default defineComponent({
         })
 
         const updateQueryParams = debounce(() => {
+            filterStore.setPriceRange(values.value[0], values.value[1])
             if (values.value[0] !== props.min || values.value[1] !== props.max) {
                 router.push({
                     query: { ...route.query, priceMin: values.value[0], priceMax: values.value[1] }
                 })
             }
-        }, 500)
+        }, 300)
 
         const startDrag = (index: number) => {
             const updateValue = (event: MouseEvent | TouchEvent) => {
@@ -82,14 +82,14 @@ export default defineComponent({
         watch(
             () => route.query.priceMin,
             (newMin) => {
-                values.value[0] = Number(newMin) || props.min
+                filterStore.priceMin = Number(newMin) || props.min
             }
         )
 
         watch(
             () => route.query.priceMax,
             (newMax) => {
-                values.value[1] = Number(newMax) || props.max
+                filterStore.priceMax = Number(newMax) || props.max
             }
         )
 
@@ -123,7 +123,7 @@ export default defineComponent({
             />
         </div>
 
-        <div class="flex justify-between mt-2 text-sm text-black">
+        <div class="flex justify-between mt-2 text-sm text-black font-semibold">
             <span>${{ values[0] }}</span>
             <span>${{ values[1] }}</span>
         </div>

@@ -30,6 +30,17 @@ export default defineComponent({
             isSelected.value = !isSelected.value
             props.parentActiveMenu()
             updateUrlParams(isSelected.value)
+
+                        async function fetchProductsByCategory(category: string) {
+            const response = await fetch(`http://localhost:3000/items?categories[0]=${category}`);
+            const products = await response.json();
+            return products;
+            }
+
+            fetchProductsByCategory("Audio").then((products) => {
+            console.log(products);
+            });
+
         }
 
         const updateUrlParams = (isSelected: boolean) => {
