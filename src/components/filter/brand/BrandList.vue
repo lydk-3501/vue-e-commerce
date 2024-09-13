@@ -2,11 +2,11 @@
 import { defineComponent, ref, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { fetchProducts } from '@/api/api'
 import BrandItem from './BrandItem.vue'
 import SearchItems from '@/components/search/SearchItems.vue'
 import SearchIcon from '@/components/icons/IconSearch.vue'
 import { useFilterStore } from '@/components/store/store'
+import { useProductStore } from '@/components/store/productStore'
 
 export default defineComponent({
     name: 'BrandList',
@@ -18,13 +18,14 @@ export default defineComponent({
     setup() {
         const { t } = useI18n()
         const filterStore = useFilterStore()
+        const productStore = useProductStore()
         const route = useRoute()
         const router = useRouter()
-        const brandCounts = ref<{ [key: string]: number }>({})
-        const brandItems = ref<string[]>([])
         const placeholder = ref(t('brandSearchPlaceholder'))
         const searchQuery = ref('')
-        const selectedBrands = computed(() => filterStore.$state.selectedBrands)
+        const selectedBrands = computed(() => filterStore.selectedBrands)
+        const brandItems = computed(() => productStore.brandItems)
+        const brandCounts = computed(() => productStore.brandCounts)
 
         const filteredBrands = computed(() => {
             const query = searchQuery.value.toLowerCase()
@@ -67,21 +68,7 @@ export default defineComponent({
 
         onMounted(async () => {
             try {
-                const products = await fetchProducts()
-
-                const brandCountMap: { [key: string]: number } = {}
-
-                products.forEach((product) => {
-                    const brand = product.brand
-                    if (brandCountMap[brand]) {
-                        brandCountMap[brand]++
-                    } else {
-                        brandCountMap[brand] = 1
-                    }
-                })
-
-                brandItems.value = Object.keys(brandCountMap)
-                brandCounts.value = brandCountMap
+                await productStore.fetchProductsAndComputeData()
             } catch (error) {
                 console.error('Failed to fetch brand data:', error)
             }
@@ -90,16 +77,17 @@ export default defineComponent({
         return {
             t,
             sortedBrands,
-            brandCounts,
             placeholder,
             searchQuery,
             addBrand,
             removeBrand,
-            selectedBrands
+            selectedBrands,
+            brandCounts
         }
     }
 })
 </script>
+
 
 <template>
     <div class="brand-menu border-t py-8 w-[260px]">

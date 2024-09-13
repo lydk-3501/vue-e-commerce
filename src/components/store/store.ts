@@ -7,12 +7,17 @@ export const useFilterStore = defineStore('filter', () => {
   const selectedBrands = ref<string[]>([])
   const priceMin = ref<number>(1)
   const priceMax = ref<number>(4800)
-
+  const brandCounts = ref<{ [key: string]: number }>({})
+  
 
   const addBrand = (brand: string) => {
     if (!selectedBrands.value.includes(brand)) {
       selectedBrands.value.push(brand)
     }
+  }
+  
+  const setBrandCounts = (counts: { [key: string]: number }) => {
+    brandCounts.value = counts
   }
 
   const removeBrand = (brand: string) => {
@@ -36,17 +41,20 @@ export const useFilterStore = defineStore('filter', () => {
     selectedRating.value = rating
   }
 
+
   return {
     isFreeShipping,
     selectedRating,
     selectedBrands,
     priceMin,
     priceMax,
+    brandCounts,
     toggleFreeShipping,
     setSelectedRating,
     addBrand,
     removeBrand,
     clearBrands,
-    setPriceRange
+    setPriceRange,
+    setBrandCounts,
   }
 })

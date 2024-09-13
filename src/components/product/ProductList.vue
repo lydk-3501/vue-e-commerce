@@ -1,25 +1,24 @@
 <script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue'
+import { defineComponent, onMounted, computed } from 'vue'
 import ProductItem from './ProductItem.vue'
-import { fetchProducts } from '@/api/api'
-import type { Product } from '@/api/api'
+import { useProductStore } from '@/components/store/productStore'
 
 export default defineComponent({
     components: {
         ProductItem
     },
     setup() {
-        const products = ref<Product[]>([])
+        const productStore = useProductStore()
+        const products = computed (()=> productStore.products)
 
         onMounted(async () => {
             try {
-                const fetchFroducts = await fetchProducts()
-
-                products.value = fetchFroducts
+                await productStore.fetchProductsAndComputeData()
             } catch (error) {
                 console.error('Failed to fetch product data:', error)
             }
         })
+
         return { products }
     }
 })

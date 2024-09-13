@@ -1,8 +1,8 @@
 <script lang="ts">
-import { defineComponent, ref, watch, onMounted, computed } from 'vue'
+import { defineComponent, computed, watch, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { fetchProducts } from '@/api/api'
+import { useProductStore } from '@/components/store/productStore'
 import StarIcon from '@/components/icons/IconStar.vue'
 import { useFilterStore } from '@/components/store/store'
 
@@ -16,16 +16,10 @@ export default defineComponent({
         const route = useRoute()
         const router = useRouter()
         const filterStore = useFilterStore()
-        const ratingNumbers = [1, 2, 3, 4, 5]
-        const ratingCounts = ref<Record<number, number>>({
-            1: 0,
-            2: 0,
-            3: 0,
-            4: 0,
-            5: 0
-        })
+        const productStore = useProductStore()
 
-        const selectedRating = computed(()=> filterStore.$state.selectedRating)
+        const ratingNumbers = [1, 2, 3, 4, 5]
+        const selectedRating = computed(() => filterStore.selectedRating)
 
         watch(
             () => route.query.rating,
@@ -45,34 +39,16 @@ export default defineComponent({
 
         onMounted(async () => {
             try {
-                const products = await fetchProducts()
-                const counts = products.reduce(
-                    (acc: Record<number, number>, product) => {
-                        const rating = Math.floor(product.rating)
-                        if (rating >= 1 && rating <= 5) {
-                            acc[rating] = (acc[rating] || 0) + 1
-                        }
-                        return acc
-                    },
-                    {} as Record<number, number>
-                )
-
-                ratingNumbers.forEach((rating) => {
-                    if (!counts[rating]) {
-                        counts[rating] = 0
-                    }
-                })
-
-                ratingCounts.value = counts
+                await productStore.fetchProductsAndComputeData()
             } catch (error) {
-                console.error('Failed to load products:', error)
+                console.error('Failed to load product data:', error)
             }
         })
 
         return {
             t,
             ratingNumbers,
-            ratingCounts,
+            ratingCounts: computed(() => productStore.ratingCounts),
             selectedRating,
             handleRatingSelect
         }
