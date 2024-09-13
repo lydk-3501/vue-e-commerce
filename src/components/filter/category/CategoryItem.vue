@@ -1,6 +1,7 @@
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useProductStore } from '@/store/productStore';
 
 export default defineComponent({
     name: 'CategoryItem',
@@ -19,6 +20,7 @@ export default defineComponent({
     setup(props) {
         const route = useRoute()
         const router = useRouter()
+        const productStore = useProductStore()
         const isSelected = ref(false)
         const activeChild = ref<string | null>(null)
 
@@ -29,18 +31,11 @@ export default defineComponent({
         const toggleMenu = () => {
             isSelected.value = !isSelected.value
             props.parentActiveMenu()
+
             updateUrlParams(isSelected.value)
-
-                        async function fetchProductsByCategory(category: string) {
-            const response = await fetch(`http://localhost:3000/items?categories[0]=${category}`);
-            const products = await response.json();
-            return products;
+            if (!isSelected.value) {
+                clearChildCategories(props.childrenItems)
             }
-
-            fetchProductsByCategory("Audio").then((products) => {
-            console.log(products);
-            });
-
         }
 
         const updateUrlParams = (isSelected: boolean) => {
@@ -57,6 +52,33 @@ export default defineComponent({
                 : currentCategories.filter((item) => item !== props.label)
 
             router.push({ query: { ...route.query, category: newCategories } })
+
+            if (isSelected) {
+                productStore.addCategory(props.label)
+            } else {
+                productStore.removeCategory(props.label)
+            }
+        }
+
+        const clearChildCategories = (childrenItems: Array<{ label: string; childrenItems?: any[] }>) => {
+            childrenItems.forEach(child => {
+                productStore.removeCategory(child.label)
+
+                const currentCategories = (
+                    Array.isArray(route.query.category)
+                        ? route.query.category
+                        : typeof route.query.category === 'string'
+                          ? [route.query.category]
+                          : []
+                ) as string[]
+
+                const updatedCategories = currentCategories.filter((item) => item !== child.label)
+                router.push({ query: { ...route.query, category: updatedCategories } })
+
+                if (child.childrenItems?.length) {
+                    clearChildCategories(child.childrenItems)
+                }
+            })
         }
 
         watch(

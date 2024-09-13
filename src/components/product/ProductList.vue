@@ -1,7 +1,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, computed } from 'vue'
 import ProductItem from './ProductItem.vue'
-import { useProductStore } from '@/components/store/productStore'
+import { useProductStore } from '@/store/productStore'
 
 export default defineComponent({
     components: {

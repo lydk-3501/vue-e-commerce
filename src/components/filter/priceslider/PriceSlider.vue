@@ -3,7 +3,7 @@ import { defineComponent, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { debounce } from '@/utils/debounce'
-import { useFilterStore } from '@/components/store/store'
+import { useFilterStore } from '@/store/store'
 
 export default defineComponent({
     name: 'PriceRangeSlider',

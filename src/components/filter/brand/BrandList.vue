@@ -5,8 +5,8 @@ import { useI18n } from 'vue-i18n'
 import BrandItem from './BrandItem.vue'
 import SearchItems from '@/components/search/SearchItems.vue'
 import SearchIcon from '@/components/icons/IconSearch.vue'
-import { useFilterStore } from '@/components/store/store'
-import { useProductStore } from '@/components/store/productStore'
+import { useFilterStore } from '@/store/store'
+import { useProductStore } from '@/store/productStore'
 
 export default defineComponent({
     name: 'BrandList',

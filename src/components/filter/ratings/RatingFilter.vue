@@ -2,9 +2,9 @@
 import { defineComponent, computed, watch, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { useProductStore } from '@/components/store/productStore'
+import { useProductStore } from '@/store/productStore'
 import StarIcon from '@/components/icons/IconStar.vue'
-import { useFilterStore } from '@/components/store/store'
+import { useFilterStore } from '@/store/store'
 
 export default defineComponent({
     name: 'RatingFilter',
