@@ -5,7 +5,6 @@ import { useI18n } from 'vue-i18n'
 import BrandItem from './BrandItem.vue'
 import SearchItems from '@/components/search/SearchItems.vue'
 import SearchIcon from '@/components/icons/IconSearch.vue'
-import { useFilterStore } from '@/store/store'
 import { useProductStore } from '@/store/productStore'
 
 export default defineComponent({
@@ -17,13 +16,12 @@ export default defineComponent({
     },
     setup() {
         const { t } = useI18n()
-        const filterStore = useFilterStore()
         const productStore = useProductStore()
         const route = useRoute()
         const router = useRouter()
         const placeholder = ref(t('brandSearchPlaceholder'))
         const searchQuery = ref('')
-        const selectedBrands = computed(() => filterStore.selectedBrands)
+        const selectedBrands = computed(() => productStore.$state.selectedBrands)
         const brandItems = computed(() => productStore.brandItems)
         const brandCounts = computed(() => productStore.brandCounts)
 
@@ -49,7 +47,7 @@ export default defineComponent({
                 }
             })
 
-            filterStore.selectedBrands.forEach((brand, index) => {
+            productStore.selectedBrands.forEach((brand, index) => {
                 query[`brand[${index + 1}]`] = brand
             })
 
@@ -57,12 +55,12 @@ export default defineComponent({
         }
 
         const addBrand = (brand: string) => {
-            filterStore.addBrand(brand)
+            productStore.addBrand(brand)
             updateURL()
         }
 
         const removeBrand = (brand: string) => {
-            filterStore.removeBrand(brand)
+            productStore.removeBrand(brand)
             updateURL()
         }
 
@@ -87,7 +85,6 @@ export default defineComponent({
     }
 })
 </script>
-
 
 <template>
     <div class="brand-menu border-t py-8 w-[260px]">

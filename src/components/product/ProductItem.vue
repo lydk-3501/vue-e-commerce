@@ -2,10 +2,12 @@
 import { defineComponent } from 'vue'
 
 import StarIcon from '../icons/IconStar.vue'
+import FreeShippingIcon from '../icons/IconFreeShipping.vue';
 
 export default defineComponent({
     components: {
-        StarIcon
+        StarIcon,
+        FreeShippingIcon
     },
     props: {
         name: { type: String, required: true },
@@ -13,7 +15,8 @@ export default defineComponent({
         categories: { type: Array<String>, required: true },
         price: { type: Number, required: true },
         rating: { type: Number, required: true },
-        image: { type: String, required: true }
+        image: { type: String, required: true },
+        free_shipping: {type: Boolean, required: true}
     },
     setup() {
         const truncateText = (text: string, maxLength: number) => {
@@ -28,7 +31,7 @@ export default defineComponent({
 
 <template>
     <article
-        class="item rounded-lg duration-300 hover:shadow-lg hover:scale-105 max-w-56 min-w-[175px] px-4 transition-all"
+        class="item rounded-lg duration-200 hover:shadow-lg hover:scale-105 max-w-56 min-w-[175px] px-4 transition-all"
     >
         <header class="image-container items-center flex mx-3 max-w-[175px] h-[175px]">
             <img class="object-cover" :src="image" :alt="name" />
@@ -65,6 +68,10 @@ export default defineComponent({
                 >
                     <StarIcon />
                     {{ rating }}
+                </span>
+
+                <span v-if="free_shipping" class="group w-1 h-1 text-sm mb-7 ml-12"> 
+                    <FreeShippingIcon/> 
                 </span>
             </p>
         </footer>

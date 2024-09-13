@@ -4,7 +4,6 @@ import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useProductStore } from '@/store/productStore'
 import StarIcon from '@/components/icons/IconStar.vue'
-import { useFilterStore } from '@/store/store'
 
 export default defineComponent({
     name: 'RatingFilter',
@@ -15,16 +14,15 @@ export default defineComponent({
         const { t } = useI18n()
         const route = useRoute()
         const router = useRouter()
-        const filterStore = useFilterStore()
         const productStore = useProductStore()
 
         const ratingNumbers = [1, 2, 3, 4, 5]
-        const selectedRating = computed(() => filterStore.selectedRating)
+        const selectedRating = computed(() => productStore.selectedRating)
 
         watch(
             () => route.query.rating,
             (newRating) => {
-                filterStore.setSelectedRating(newRating ? Number(newRating) : null)
+                productStore.setSelectedRating(newRating ? Number(newRating) : 0)
             },
             { immediate: true }
         )
@@ -32,7 +30,7 @@ export default defineComponent({
         const handleRatingSelect = (rating: number) => {
             const query = {
                 ...route.query,
-                rating: rating !== filterStore.selectedRating ? rating : undefined
+                rating: rating !== productStore.selectedRating ? rating : undefined
             }
             router.push({ query }).catch(() => {})
         }
@@ -77,7 +75,7 @@ export default defineComponent({
                     />
                 </template>
                 <span
-                    class="brand-item-count bg-gray-300 font-bold ml-2 mt-[6px] px-1 rounded tracking-[1.1px] text-[0.64rem] text-gray-600"
+                    class="brand-item-count bg-gray-300 font-bold ml-2 mt-[6px] px-1 rounded tracking-[1.1px] text-[0.64rem] text-title"
                 >
                     {{ ratingCounts[rating] || 0 }}
                 </span>

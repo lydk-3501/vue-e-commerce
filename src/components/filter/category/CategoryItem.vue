@@ -1,7 +1,7 @@
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useProductStore } from '@/store/productStore';
+import { useProductStore } from '@/store/productStore'
 
 export default defineComponent({
     name: 'CategoryItem',
@@ -60,8 +60,10 @@ export default defineComponent({
             }
         }
 
-        const clearChildCategories = (childrenItems: Array<{ label: string; childrenItems?: any[] }>) => {
-            childrenItems.forEach(child => {
+        const clearChildCategories = (
+            childrenItems: Array<{ label: string; childrenItems?: any[] }>
+        ) => {
+            childrenItems.forEach((child) => {
                 productStore.removeCategory(child.label)
 
                 const currentCategories = (

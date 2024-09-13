@@ -3,7 +3,7 @@ import { defineComponent, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { debounce } from '@/utils/debounce'
-import { useFilterStore } from '@/store/store'
+import { useProductStore } from '@/store/productStore'
 
 export default defineComponent({
     name: 'PriceRangeSlider',
@@ -15,9 +15,9 @@ export default defineComponent({
         const { t } = useI18n()
         const route = useRoute()
         const router = useRouter()
-        const filterStore = useFilterStore()
+        const productStore = useProductStore()
 
-        const values = computed(() => [filterStore.$state.priceMin, filterStore.$state.priceMax])
+        const values = computed(() => [productStore.$state.priceRange[0], productStore.$state.priceRange[1]])
 
         const trackStyle = computed(() => {
             const minPos = ((values.value[0] - props.min) / (props.max - props.min)) * 100
@@ -41,7 +41,7 @@ export default defineComponent({
         })
 
         const updateQueryParams = debounce(() => {
-            filterStore.setPriceRange(values.value[0], values.value[1])
+            productStore.updatePriceRange(values.value[0], values.value[1])
             if (values.value[0] !== props.min || values.value[1] !== props.max) {
                 router.push({
                     query: { ...route.query, priceMin: values.value[0], priceMax: values.value[1] }
@@ -82,14 +82,14 @@ export default defineComponent({
         watch(
             () => route.query.priceMin,
             (newMin) => {
-                filterStore.priceMin = Number(newMin) || props.min
+                productStore.priceRange[0] = Number(newMin) || props.min
             }
         )
 
         watch(
             () => route.query.priceMax,
             (newMax) => {
-                filterStore.priceMax = Number(newMax) || props.max
+                productStore.priceRange[1] = Number(newMax) || props.max
             }
         )
 
@@ -122,10 +122,16 @@ export default defineComponent({
                 @touchstart="startDrag(index)"
             />
         </div>
-
-        <div class="flex justify-between mt-2 text-sm text-black font-semibold">
-            <span>${{ values[0] }}</span>
-            <span>${{ values[1] }}</span>
+        <div class="flex justify-between mt-2 text-sm text-black">
+            <span class="font-semibold">
+                <span class="text-amber-500">$</span>
+                {{ values[0] }}
+            </span>
+            <span class="font-semibold">
+                <span class="text-amber-500">$</span>
+                {{ values[1] }}
+            </span>
         </div>
+
     </div>
 </template>

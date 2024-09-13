@@ -3,208 +3,208 @@ const categoryItems = [
         label: 'TV & Home Theater',
         childrenItems: [
             {
-                label: 'Streaming Media Players',
+                label: 'Streaming Media Players'
             },
             {
-                label: 'TVs',
+                label: 'TVs'
             },
             {
-                label: 'Blu-ray & DVD Players',
+                label: 'Blu-ray & DVD Players'
             },
             {
-                label: 'TV Mounts',
+                label: 'TV Mounts'
             },
             {
-                label: 'TV Stands',
+                label: 'TV Stands'
             },
             {
-                label: 'CD & DVD Media Storage',
-            },
-        ],
+                label: 'CD & DVD Media Storage'
+            }
+        ]
     },
     {
         label: 'Computers & Tablets',
         childrenItems: [
             {
-                label: 'Laptops',
+                label: 'Laptops'
             },
             {
-                label: 'Optical Drives',
+                label: 'Optical Drives'
             },
             {
-                label: 'Tablets',
+                label: 'Tablets'
             },
             {
-                label: 'All Desktops',
+                label: 'All Desktops'
             },
             {
-                label: 'Monitors',
+                label: 'Monitors'
             },
             {
-                label: 'Networking & Wireless',
+                label: 'Networking & Wireless'
             },
             {
-                label: 'Fans, Heatsinks & Cooling',
+                label: 'Fans, Heatsinks & Cooling'
             },
             {
-                label: 'Interface / Add-On Cards',
+                label: 'Interface / Add-On Cards'
             },
             {
-                label: 'Power Supplies',
+                label: 'Power Supplies'
             },
             {
-                label: 'Memory (RAM)',
+                label: 'Memory (RAM)'
             },
             {
-                label: 'GPUs/Video Graphics Cards',
+                label: 'GPUs/Video Graphics Cards'
             },
             {
-                label: 'Hard Drive Enclosures',
-            },
-        ],
+                label: 'Hard Drive Enclosures'
+            }
+        ]
     },
     {
         label: 'Audio',
         childrenItems: [
             {
-                label: 'Headphones',
+                label: 'Headphones'
             },
             {
-                label: 'Home Audio',
+                label: 'Home Audio'
             },
             {
-                label: 'Docks, Radios & Boomboxes',
+                label: 'Docks, Radios & Boomboxes'
             },
             {
-                label: 'iPod and MP3 Players',
-            },
-        ],
+                label: 'iPod and MP3 Players'
+            }
+        ]
     },
     {
         label: 'Video Games',
         childrenItems: [
             {
-                label: 'Toys to Life',
+                label: 'Toys to Life'
             },
             {
-                label: 'PSP',
+                label: 'PSP'
             },
             {
-                label: 'PlayStation 4',
+                label: 'PlayStation 4'
             },
             {
-                label: 'Xbox 360',
+                label: 'Xbox 360'
             },
             {
-                label: 'Video Game Collectibles',
+                label: 'Video Game Collectibles'
             },
             {
-                label: 'Minecraft Collectibles',
+                label: 'Minecraft Collectibles'
             },
             {
-                label: 'Game Downloads',
+                label: 'Game Downloads'
             },
             {
-                label: 'PC Gaming',
+                label: 'PC Gaming'
             },
             {
-                label: 'Game Guides',
-            },
-        ],
+                label: 'Game Guides'
+            }
+        ]
     },
     {
         label: 'Cell Phones',
         childrenItems: [
             {
-                label: 'Prepaid Phones',
+                label: 'Prepaid Phones'
             },
             {
-                label: 'Unlocked Cell Phones',
+                label: 'Unlocked Cell Phones'
             },
             {
-                label: 'All Cell Phones with Plans',
-            },
-        ],
+                label: 'All Cell Phones with Plans'
+            }
+        ]
     },
     {
         label: 'Cameras & Camcorders',
         childrenItems: [
             {
-                label: 'Memory Cards',
+                label: 'Memory Cards'
             },
             {
-                label: 'Digital Cameras',
+                label: 'Digital Cameras'
             },
             {
-                label: 'Camcorders',
-            },
-        ],
+                label: 'Camcorders'
+            }
+        ]
     },
     {
         label: 'Office & School Supplies',
         childrenItems: [
             {
-                label: 'Printer Ink & Toner',
-            },
-        ],
+                label: 'Printer Ink & Toner'
+            }
+        ]
     },
     {
         label: 'Car Electronics & GPS',
         childrenItems: [
             {
-                label: 'Car Audio',
-            },
-        ],
+                label: 'Car Audio'
+            }
+        ]
     },
     {
         label: 'Appliances',
         childrenItems: [
             {
-                label: 'Thermostats',
+                label: 'Thermostats'
             },
             {
-                label: 'Microwaves',
+                label: 'Microwaves'
             },
             {
-                label: 'Small Kitchen Appliances',
+                label: 'Small Kitchen Appliances'
             },
             {
-                label: 'Robot Vacuums and Mops',
+                label: 'Robot Vacuums and Mops'
             },
             {
-                label: 'Upright Vacuums',
+                label: 'Upright Vacuums'
             },
             {
-                label: 'Freezers & Ice Makers',
+                label: 'Freezers & Ice Makers'
             },
             {
-                label: 'Washers & Dryers',
+                label: 'Washers & Dryers'
             },
             {
-                label: 'Humidifiers',
+                label: 'Humidifiers'
             },
             {
-                label: 'Dishwashers',
+                label: 'Dishwashers'
             },
             {
-                label: 'Handheld & Stick Vacuums',
-            },
-        ],
+                label: 'Handheld & Stick Vacuums'
+            }
+        ]
     },
     {
         label: 'Health, Fitness & Beauty',
         childrenItems: [
             {
-                label: 'Fitness & GPS Watches',
+                label: 'Fitness & GPS Watches'
             },
             {
-                label: 'Personal Care & Beauty',
+                label: 'Personal Care & Beauty'
             },
             {
-                label: 'Fitness & Exercise',
-            },
-        ],
-    },
-];
+                label: 'Fitness & Exercise'
+            }
+        ]
+    }
+]
 
-export { categoryItems };
+export { categoryItems }
