@@ -2,7 +2,7 @@
 import { defineComponent, watch, onMounted, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
-import { useProductStore } from '@/store/productStore';
+import { useProductStore } from '@/store/productStore'
 
 export default defineComponent({
     name: 'FreeShipping',

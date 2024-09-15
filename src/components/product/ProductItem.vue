@@ -1,8 +1,7 @@
 <script lang="ts">
-import { defineComponent } from 'vue'
-
+import { defineComponent, ref } from 'vue'
 import StarIcon from '../icons/IconStar.vue'
-import FreeShippingIcon from '../icons/IconFreeShipping.vue';
+import FreeShippingIcon from '../icons/IconFreeShipping.vue'
 
 export default defineComponent({
     components: {
@@ -16,14 +15,25 @@ export default defineComponent({
         price: { type: Number, required: true },
         rating: { type: Number, required: true },
         image: { type: String, required: true },
-        free_shipping: {type: Boolean, required: true}
+        free_shipping: { type: Boolean, required: true }
     },
     setup() {
-        const truncateText = (text: string, maxLength: number) => {
-            return text.length > maxLength ? text.substring(0, maxLength) + '...' : text
+        const showModal = ref(false)  // Modal state
+
+
+        const addToCart = () => {
+            // Logic for adding the item to the cart
+            console.log('Item added to cart')
         }
+
+        const toggleModal = () => {
+            showModal.value = !showModal.value
+        }
+
         return {
-            truncateText
+            addToCart,
+            showModal,
+            toggleModal
         }
     }
 })
@@ -45,17 +55,7 @@ export default defineComponent({
             >
                 {{ name }}
             </h1>
-            <a class="item-description break-words mb-3 text-sm text-gray-900">
-                {{ truncateText(description, 100) }}
-            </a>
-            <span
-                class="item-tooltip absolute bg-gray-200 group-hover:block hidden ml-32 left-full bottom-0 p-4 rounded-lg text-justify transform -translate-x-1/2 text-black text-xs w-60 z-1"
-            >
-                {{ description }}
-                <span
-                    class="absolute top-8 -left-1 transform -translate-x-1/2 -translate-y-full w-1 h-1 border-l-8 border-l-transparent border-r-8 border-r-transparent border-b-8 border-b-gray-200 -rotate-90"
-                ></span>
-            </span>
+
         </div>
         <footer>
             <p class="flex items-center my-3.5 text-black">
@@ -70,10 +70,64 @@ export default defineComponent({
                     {{ rating }}
                 </span>
 
-                <span v-if="free_shipping" class="group w-1 h-1 text-sm mb-7 ml-12"> 
-                    <FreeShippingIcon/> 
+                <span v-if="free_shipping" class="group w-1 h-1 text-sm mb-7 ml-12">
+                    <FreeShippingIcon />
                 </span>
             </p>
+
+            <!-- View More Button -->
+            <button
+                @click="toggleModal"
+                class="w-full bg-white text-black text-xs py-2 rounded-lg hover:bg-yellow-500 transition-all duration-200 flex justify-center"
+            >
+                <img class="h-3 mt-1 w-3 transition-transform z-1" src="/images/toggle-icon.svg" />
+                View more
+            </button>
         </footer>
     </article>
+
+    <!-- Modal for product details -->
+    <div v-if="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+        <div class="bg-white p-6 rounded-lg w-[90%] md:w-[50%] relative">
+            <!-- Close Button -->
+            <button @click="toggleModal" class="absolute top-2 right-2 text-black">
+                &#10005;
+            </button>
+
+            <!-- Modal Content -->
+            <div class="modal-content text-black">
+                <header class="flex items-center">
+                    <img class="object-cover w-24 h-24 mr-4" :src="image" :alt="name" />
+                    <div>
+                        <h1 class="font-bold text-xl">{{ name }}</h1>
+                        <p class="text-sm text-gray-500">{{ categories.join(' & ') }}</p>
+                        <p class="text-lg font-semibold text-black">Price: ${{ price.toFixed(2) }}</p>
+                        <span
+                            class="flex items-center mt-2 border border-yellow-500 px-2 py-1 rounded-md text-xs text-yellow-500"
+                        >
+                            <StarIcon class="mr-1" />
+                            Rating: {{ rating }}
+                        </span>
+                    </div>
+                </header>
+
+                <p class="my-4 text-sm">{{ description }}</p>
+
+                <!-- Add to Cart button inside modal -->
+                <button
+                    @click="addToCart"
+                    class="w-full bg-yellow-500 text-white text-xs py-2 rounded-lg hover:bg-yellow-600 transition-all duration-200"
+                >
+                    Add to Cart
+                </button>
+            </div>
+        </div>
+    </div>
 </template>
+
+<style scoped>
+.modal-content {
+    max-height: 80vh;
+    overflow-y: auto;
+}
+</style>

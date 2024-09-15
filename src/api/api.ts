@@ -20,7 +20,6 @@ export interface Product {
     objectID: string
 }
 
-
 interface FilterParams {
     categories?: string[]
     brand?: string[]
@@ -33,8 +32,6 @@ interface FilterParams {
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL
 
 export const fetchProducts = async (filters: FilterParams): Promise<Product[]> => {
-
-
     try {
         const params = new URLSearchParams()
 

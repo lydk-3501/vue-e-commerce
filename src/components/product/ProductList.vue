@@ -11,6 +11,10 @@ export default defineComponent({
         const productStore = useProductStore()
         const products = computed(() => productStore.filteredProducts)
 
+        console.log('====================================')
+        console.log(products)
+        console.log('====================================')
+
         return {
             products
         }

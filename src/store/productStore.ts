@@ -17,7 +17,7 @@ export const useProductStore = defineStore('product', () => {
     const selectedCategories = ref<string[]>([])
     const selectedBrands = ref<string[]>([])
     const priceRange = ref<[number, number]>([0, 4800])
-    const selectedRating = ref<number|undefined>(undefined)
+    const selectedRating = ref<number | undefined>(undefined)
     const sortBy = ref<string>('')
     const isFreeShipping = ref<boolean>(false)
 
@@ -68,18 +68,20 @@ export const useProductStore = defineStore('product', () => {
         }
     }
 
-        // Getter to filter products by selected brands
-        const filteredProducts = computed(() => {
-            return products.value.filter((product) => {
-                const matchesBrand = selectedBrands.value.length === 0 || selectedBrands.value.includes(product.brand)
-                const matchesRating = selectedRating.value===0 || Math.floor(product.rating) === selectedRating.value
-                return matchesBrand && matchesRating
-            })
+    // Getter to filter products by selected brands
+    const filteredProducts = computed(() => {
+        return products.value.filter((product) => {
+            const matchesBrand =
+                selectedBrands.value.length === 0 || selectedBrands.value.includes(product.brand)
+            const matchesRating =
+                selectedRating.value === 0 || Math.floor(product.rating) === selectedRating.value
+            return matchesBrand && matchesRating
         })
+    })
 
     // Automatically fetch data when filters are changed
     watch(
-        [selectedCategories, selectedBrands, priceRange, sortBy,isFreeShipping, selectedRating],
+        [selectedCategories, selectedBrands, priceRange, sortBy, isFreeShipping, selectedRating],
         () => {
             fetchProductsAndComputeData()
         },
@@ -117,8 +119,8 @@ export const useProductStore = defineStore('product', () => {
         priceRange.value = [minPrice, maxPrice]
     }
 
-    const toggleFreeShipping = () =>{
-      isFreeShipping.value = !isFreeShipping.value
+    const toggleFreeShipping = () => {
+        isFreeShipping.value = !isFreeShipping.value
     }
 
     const setSelectedRating = (rating: number) => {
@@ -131,8 +133,6 @@ export const useProductStore = defineStore('product', () => {
         priceRange.value = [0, 10000]
         sortBy.value = ''
     }
-
-
 
     return {
         filteredProducts,

@@ -17,7 +17,10 @@ export default defineComponent({
         const router = useRouter()
         const productStore = useProductStore()
 
-        const values = computed(() => [productStore.$state.priceRange[0], productStore.$state.priceRange[1]])
+        const values = computed(() => [
+            productStore.$state.priceRange[0],
+            productStore.$state.priceRange[1]
+        ])
 
         const trackStyle = computed(() => {
             const minPos = ((values.value[0] - props.min) / (props.max - props.min)) * 100
@@ -132,6 +135,5 @@ export default defineComponent({
                 {{ values[1] }}
             </span>
         </div>
-
     </div>
 </template>
