@@ -1,8 +1,10 @@
 import { defineStore } from 'pinia'
-import { ref, watch, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { fetchProducts } from '@/api/api'
 import type { Product } from '@/api/api'
 
+export type SortCriteria = 'priceAsc' | 'priceDesc' | 'ratingAsc' | 'ratingDesc' | 'feature'
+export type HitsPerPage = 16 | 32 | 64 
 export const useProductStore = defineStore('product', () => {
     const products = ref<Product[]>([])
     const brandCounts = ref<{ [key: string]: number }>({})
@@ -18,8 +20,10 @@ export const useProductStore = defineStore('product', () => {
     const selectedBrands = ref<string[]>([])
     const priceRange = ref<[number, number]>([0, 4800])
     const selectedRating = ref<number | undefined>(undefined)
-    const sortBy = ref<string>('')
+    const sortBy = ref<SortCriteria>('feature') // Default sorting option
     const isFreeShipping = ref<boolean>(false)
+    const hitsPerPage = ref<HitsPerPage>(16) // Default hits per page
+    const currentPage = ref<number>(1)
 
     // Fetch products based on the current filters
     const fetchProductsAndComputeData = async () => {
@@ -27,7 +31,7 @@ export const useProductStore = defineStore('product', () => {
             const productData = await fetchProducts({
                 priceRange: priceRange.value,
                 freeShipping: isFreeShipping.value,
-                sortBy: sortBy.value
+                sortBy: sortBy.value,
             })
 
             // Update product list
@@ -70,18 +74,54 @@ export const useProductStore = defineStore('product', () => {
 
     // Getter to filter products by selected brands
     const filteredProducts = computed(() => {
-        return products.value.filter((product) => {
+        let filtered = products.value.filter((product) => {
             const matchesBrand =
-                selectedBrands.value.length === 0 || selectedBrands.value.includes(product.brand)
+                selectedBrands.value.length === 0 || selectedBrands.value.includes(product.brand);
             const matchesRating =
-                selectedRating.value === 0 || Math.floor(product.rating) === selectedRating.value
-            return matchesBrand && matchesRating
-        })
+                selectedRating.value === 0 || Math.floor(product.rating) === selectedRating.value;
+            return matchesBrand && matchesRating;
+        });
+
+        // Sort products based on selected sort criteria
+        switch (sortBy.value) {
+            case 'priceAsc':
+                filtered = filtered.sort((a, b) => a.price - b.price);
+                break;
+            case 'priceDesc':
+                filtered = filtered.sort((a, b) => b.price - a.price);
+                break;
+            case 'ratingAsc':
+                filtered = filtered.sort((a, b) => a.rating - b.rating);
+                break;
+            case 'ratingDesc':
+                filtered = filtered.sort((a, b) => b.rating - a.rating);
+                break;
+            case 'feature':
+                break;
+        }
+
+        return filtered;
+    });
+
+    // Getter to filter and paginate products
+    const paginatedProducts = computed(() => {
+        const start = (currentPage.value - 1) * hitsPerPage.value
+        const end = start + hitsPerPage.value
+        return filteredProducts.value.slice(start, end)
     })
 
-    // Automatically fetch data when filters are changed
+    // Automatically fetch data when filters or sorting criteria are changed
     watch(
-        [selectedCategories, selectedBrands, priceRange, sortBy, isFreeShipping, selectedRating],
+        [
+            selectedCategories,
+            selectedBrands,
+            priceRange,
+            sortBy,
+            isFreeShipping,
+            selectedRating,
+            hitsPerPage,
+            currentPage
+        ],
         () => {
             fetchProductsAndComputeData()
         },
@@ -127,14 +167,29 @@ export const useProductStore = defineStore('product', () => {
         selectedRating.value = rating
     }
 
+    const setSortBy = (criteria: SortCriteria) => {
+        sortBy.value = criteria
+    }
+
+    const setHitsPerPage = (hits: HitsPerPage) => {
+        hitsPerPage.value = hits
+        currentPage.value = 1 // Reset to first page when hits per page changes
+    }
+
+    const setCurrentPage = (page: number) => {
+        currentPage.value = page
+    }
+
     const clearFilters = () => {
         selectedCategories.value = []
         selectedBrands.value = []
-        priceRange.value = [0, 10000]
-        sortBy.value = ''
+        priceRange.value = [0, 4800]
+        sortBy.value = 'priceAsc' // Reset to default sorting option
+        currentPage.value = 1 // Reset to first page
     }
 
     return {
+        paginatedProducts,
         filteredProducts,
         brandCounts,
         brandItems,
@@ -145,6 +200,8 @@ export const useProductStore = defineStore('product', () => {
         priceRange,
         isFreeShipping,
         sortBy,
+        hitsPerPage,
+        currentPage,
         fetchProductsAndComputeData,
         addCategory,
         removeCategory,
@@ -152,6 +209,9 @@ export const useProductStore = defineStore('product', () => {
         removeBrand,
         updatePriceRange,
         setSelectedRating,
+        setSortBy,
+        setHitsPerPage,
+        setCurrentPage,
         toggleFreeShipping,
         clearFilters
     }

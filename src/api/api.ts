@@ -26,6 +26,8 @@ interface FilterParams {
     priceRange?: [number, number]
     rating?: number
     sortBy?: string
+    hitsPerPage?: number
+    page?: number
     freeShipping?: boolean
 }
 
@@ -52,7 +54,7 @@ export const fetchProducts = async (filters: FilterParams): Promise<Product[]> =
             params.append('sortBy', filters.sortBy)
         }
 
-        if (filters.rating) {
+        if (filters.rating !== undefined) {
             params.append('rating', filters.rating.toString())
         }
 
@@ -60,7 +62,7 @@ export const fetchProducts = async (filters: FilterParams): Promise<Product[]> =
             params.append('free_shipping', 'true')
         }
 
-        const response = await axios.get<Product[]>(`${apiBaseUrl}/items/?${params}`)
+        const response = await axios.get<Product[]>(`${apiBaseUrl}/items`, { params })
         return response.data
     } catch (error) {
         console.error('Failed to fetch products:', error)
