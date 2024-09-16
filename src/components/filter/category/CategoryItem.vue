@@ -7,7 +7,7 @@ export default defineComponent({
     name: 'CategoryItem',
     props: {
         label: { type: String, required: true },
-        count: { type: String, required: true },
+        count: { type: Number, required: true },
         childrenItems: {
             type: Array as () => Array<{ label: string; childrenItems?: any[] }>,
             default: () => []
@@ -98,7 +98,13 @@ export default defineComponent({
             { immediate: true }
         )
 
-        return { isSelected, toggleMenu, activeMenu, activeChild }
+        const getCategoryCount = (label: string) => {
+            return productStore.filteredProducts.filter((product) =>
+                product.categories.includes(label)
+            ).length
+        }
+
+        return { isSelected, toggleMenu, activeMenu, activeChild, getCategoryCount }
     }
 })
 </script>
@@ -131,7 +137,7 @@ export default defineComponent({
             <div v-for="(child, index) in childrenItems" :key="index" class="pl-4">
                 <CategoryItem
                     :label="child.label"
-                    :count="'123'"
+                    :count="getCategoryCount(child.label)"
                     :childrenItems="child.childrenItems"
                     :isParentSelected="isSelected && activeChild === child.label"
                     :parentActiveMenu="activeMenu"

@@ -26,5 +26,14 @@
     "cardNumber": "Card Number",
     "expirationDate": "Expiration Date",
     "checkOut": "Check Out",
-    "hitsPerPage": " hits per page"
+    "hitsPerPage": " hits per page",
+    "login": "Log in",
+    "logout": "Log out",
+    "password": "Password",
+    "email": "Email",
+    "sortPriceAsc": "Price ascending",
+    "sortPriceDesc": "Price descending",
+    "sortRatingAsc": "Rating ascending",
+    "sortRatingDesc": "Rating descending",
+    "sortFeature": "Sort by feature"
 }

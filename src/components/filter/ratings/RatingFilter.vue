@@ -55,7 +55,7 @@ export default defineComponent({
 </script>
 
 <template>
-    <div class="w-[260px] border-t py-8">
+    <div class="w-full border-t py-8">
         <h2
             class="ratings-header font-hind font-semibold leading-normal pb-4 text-[0.678rem] text-title tracking-[.08rem] uppercase"
         >

@@ -87,7 +87,7 @@ export default defineComponent({
 </script>
 
 <template>
-    <div class="brand-menu border-t py-8 w-[260px]">
+    <div class="brand-menu border-t py-8 w-full">
         <div>
             <h2
                 class="brand-menu-header leading-normal font-semibold font-hind pb-4 text-[0.678rem] text-title tracking-[.08rem] uppercase"

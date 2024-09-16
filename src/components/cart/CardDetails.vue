@@ -1,12 +1,22 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
     setup() {
         const { t } = useI18n()
+        const router = useRouter()
+
+        const handleCheckout = () => {
+            setTimeout(() => {
+                router.push({ path: '/' })
+            }, 500) // Giả lập thời gian chờ để xử lý mua hàng
+        }
+
         return {
-            t
+            t,
+            handleCheckout
         }
     }
 })
@@ -85,7 +95,10 @@ export default defineComponent({
         </div>
     </div>
 
-    <button class="h-12 w-full bg-blue-500 rounded focus:outline-none text-white hover:bg-blue-600">
+    <button
+        class="h-12 w-full bg-blue-500 rounded focus:outline-none text-white hover:bg-blue-600"
+        @click="handleCheckout"
+    >
         {{ $t('checkOut') }}
     </button>
 </template>

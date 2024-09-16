@@ -7,8 +7,8 @@ export type SortCriteria = 'priceAsc' | 'priceDesc' | 'ratingAsc' | 'ratingDesc'
 export type HitsPerPage = 16 | 32 | 64
 export const useProductStore = defineStore('product', () => {
     const products = ref<Product[]>([])
-    const searchedProducts = ref<Product[]>([])
     const brandCounts = ref<{ [key: string]: number }>({})
+
     const brandItems = ref<string[]>([])
     const ratingCounts = ref<Record<number, number>>({
         1: 0,
@@ -26,6 +26,7 @@ export const useProductStore = defineStore('product', () => {
     const hitsPerPage = ref<HitsPerPage>(16)
     const currentPage = ref<number>(1)
     const searchQuery = ref('')
+    const categoryCountMap: { [key: string]: number } = {}
 
     // Fetch products based on the current filters
     const fetchProductsAndComputeData = async () => {
@@ -77,11 +78,14 @@ export const useProductStore = defineStore('product', () => {
     // Getter to filter products by selected brands
     const filteredProducts = computed(() => {
         let filtered = products.value.filter((product) => {
+            const matchesCategories =
+                selectedCategories.value.length == 0 ||
+                product.categories.join().includes(selectedCategories.value.join())
             const matchesBrand =
                 selectedBrands.value.length === 0 || selectedBrands.value.includes(product.brand)
             const matchesRating =
                 selectedRating.value === 0 || Math.floor(product.rating) === selectedRating.value
-            return matchesBrand && matchesRating
+            return matchesBrand && matchesRating && matchesCategories
         })
 
         // Sort products based on selected sort criteria
@@ -180,7 +184,7 @@ export const useProductStore = defineStore('product', () => {
 
     const setHitsPerPage = (hits: HitsPerPage) => {
         hitsPerPage.value = hits
-        currentPage.value = 1 // Reset to first page when hits per page changes
+        currentPage.value = 1
     }
 
     const setCurrentPage = (page: number) => {
@@ -209,6 +213,7 @@ export const useProductStore = defineStore('product', () => {
         sortBy,
         hitsPerPage,
         currentPage,
+        categoryCountMap,
         fetchProductsAndComputeData,
         addCategory,
         removeCategory,

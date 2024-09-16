@@ -55,7 +55,7 @@ export default defineComponent({
     <div class="flex items-center justify-center min-h-screen bg-gray-100">
         <div class="w-full max-w-md p-8 bg-white shadow-lg rounded-lg">
             <h2 class="text-2xl font-semibold mb-6 text-center text-black">{{ t('login') }}</h2>
-            <form @submit.prevent="handleSubmit" class="space-y-4">
+            <form @submit.prevent="handleSubmit" class="space-y-4 text-black">
                 <div>
                     <label for="email" class="block text-sm font-medium text-gray-700">{{
                         t('email')
@@ -91,7 +91,7 @@ export default defineComponent({
                         type="submit"
                         class="w-full py-2 px-4 bg-gray-200 text-black rounded-md hover:bg-amber-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 font-semibold"
                     >
-                        {{ t('Login') }}
+                        {{ t('login') }}
                     </button>
                 </div>
             </form>

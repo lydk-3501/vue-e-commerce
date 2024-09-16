@@ -51,10 +51,12 @@ export default defineComponent({
 
 <template>
     <article
-        class="item rounded-lg duration-200 hover:shadow-lg hover:scale-105 max-w-56 min-w-[175px] px-4 transition-all"
+        class="item rounded-lg duration-200 hover:shadow-lg hover:scale-105 max-w-3/4 mb-4 min-w-2/3 px-4 transition-all"
     >
-        <header class="image-container items-center flex mx-3 max-w-[175px] h-[175px]">
-            <img class="object-cover" :src="image" :alt="name" />
+        <header
+            class="image-container items-center justify-center flex mx-3 max-w-[175px] h-[175px]"
+        >
+            <img class="object-cover" :src="image" :alt="name.replace(/-/g, ',')" />
         </header>
         <div class="info-container inline-block group">
             <p class="item-category font-semibold mb-2 mt-3 text-gray-500 text-xs uppercase">
@@ -62,7 +64,7 @@ export default defineComponent({
             </p>
             <h1
                 class="item-highlight break-words font-bold leading-[18px] text-[14.4px] text-black"
-                v-html="highlightedName"
+                v-html="highlightedName.replace(/-/g, ',')"
             ></h1>
         </div>
         <footer>
@@ -83,7 +85,6 @@ export default defineComponent({
                 </span>
             </p>
 
-            <!-- View More Button -->
             <button
                 @click="toggleModal"
                 class="w-full bg-white text-black text-xs py-2 rounded-lg hover:font-bold transition-all duration-200 flex justify-center"
@@ -94,10 +95,9 @@ export default defineComponent({
         </footer>
     </article>
 
-    <!-- Use the modal component -->
     <ProductDetails
         :visible="showModal"
-        :name="name"
+        :name="name.replace(/-/g, ',')"
         :description="description"
         :categories="categories"
         :price="price"

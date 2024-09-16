@@ -58,7 +58,7 @@ export default defineComponent({
             priceDesc: t('sortPriceDesc'),
             ratingAsc: t('sortRatingAsc'),
             ratingDesc: t('sortRatingDesc'),
-            feature: t('sortFeature') // Add 'feature' if it's a valid sort option
+            feature: t('sortFeature')
         }))
 
         return {

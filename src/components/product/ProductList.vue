@@ -61,11 +61,17 @@ export default defineComponent({
 
 <template>
     <div>
-        <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
+        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-10">
             <ProductItem
                 v-for="(product, index) in products"
                 :key="index"
-                v-bind="product"
+                :name="product.name"
+                :description="product.description"
+                :price="product.price"
+                :image="product.image"
+                :rating="product.rating"
+                :categories="product.categories"
+                :free_shipping="product.free_shipping"
                 :searchQuery="searchQuery"
             />
         </div>
