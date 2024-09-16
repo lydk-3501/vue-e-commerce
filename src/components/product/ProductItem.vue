@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, computed } from 'vue'
 import StarIcon from '../icons/IconStar.vue'
 import FreeShippingIcon from '../icons/IconFreeShipping.vue'
 import ProductDetails from './ProductDetails.vue'
@@ -17,17 +17,33 @@ export default defineComponent({
         price: { type: Number, required: true },
         rating: { type: Number, required: true },
         image: { type: String, required: true },
-        free_shipping: { type: Boolean, required: true }
+        free_shipping: { type: Boolean, required: true },
+        searchQuery: { type: String, default: '' }
     },
-    setup() {
+    setup(props) {
         const showModal = ref(false)
         const toggleModal = () => {
             showModal.value = !showModal.value
         }
 
+        const highlightText = (text: string, query: string) => {
+            if (!query) return text
+            const regex = new RegExp(`(${query})`, 'gi')
+            return text.replace(regex, '<mark>$1</mark>')
+        }
+
+        const highlightedName = computed(() => highlightText(props.name, props.searchQuery))
+        const highlightedCategories = computed(() =>
+            props.categories
+                .map((category) => highlightText(category, props.searchQuery))
+                .join(' & ')
+        )
+
         return {
             showModal,
-            toggleModal
+            toggleModal,
+            highlightedName,
+            highlightedCategories
         }
     }
 })
@@ -42,13 +58,12 @@ export default defineComponent({
         </header>
         <div class="info-container inline-block group">
             <p class="item-category font-semibold mb-2 mt-3 text-gray-500 text-xs uppercase">
-                {{ categories.join(' & ') }}
+                <span v-html="highlightedCategories"></span>
             </p>
             <h1
                 class="item-highlight break-words font-bold leading-[18px] text-[14.4px] text-black"
-            >
-                {{ name }}
-            </h1>
+                v-html="highlightedName"
+            ></h1>
         </div>
         <footer>
             <p class="flex items-center my-3.5 text-black">

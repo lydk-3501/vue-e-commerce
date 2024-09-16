@@ -15,9 +15,9 @@
             >
                 1
             </button>
-            <span v-if="startPage > 2" class="px-4 py-2 text-[14.4px] text-gray-700 bg-gray-50"
-                >...</span
-            >
+            <span v-if="startPage > 2" class="px-4 py-2 text-[14.4px] text-gray-700 bg-gray-50">
+                ...
+            </span>
         </template>
 
         <button
@@ -39,8 +39,9 @@
             <span
                 v-if="endPage < totalPages - 1"
                 class="px-4 py-2 text-[14.4px] text-gray-700 bg-gray-50"
-                >...</span
             >
+                ...
+            </span>
             <button
                 @click="handlePageChange(totalPages)"
                 class="px-4 py-2 text-[14.4px] text-gray-900 bg-gray-50 hover:bg-gray-100 rounded"
@@ -63,7 +64,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, computed } from 'vue'
+import { useProductStore } from '@/store/productStore'
 
 export default defineComponent({
     name: 'PaginationItems',
@@ -77,45 +79,52 @@ export default defineComponent({
             required: true
         }
     },
-    methods: {
-        handlePageChange(page: number) {
-            if (page !== this.currentPage && page >= 1 && page <= this.totalPages) {
-                this.updateUrlParam(page)
+    setup(props) {
+        const productStore = useProductStore()
+
+        const handlePageChange = (page: number) => {
+            if (page !== props.currentPage && page >= 1 && page <= props.totalPages) {
+                productStore.setCurrentPage(page)
+                updateUrlParam(page)
             }
-        },
-        updateUrlParam(page: number) {
+        }
+
+        const updateUrlParam = (page: number) => {
             const url = new URL(window.location.href)
             const params = new URLSearchParams(url.search)
             params.set('page', page.toString())
             window.history.pushState({}, '', `${url.pathname}?${params}`)
         }
-    },
-    computed: {
-        maxVisiblePages() {
-            return 5
-        },
-        startPage() {
-            return Math.max(
+
+        const maxVisiblePages = 5
+
+        const startPage = computed(() =>
+            Math.max(
                 1,
                 Math.min(
-                    this.currentPage - Math.floor(this.maxVisiblePages / 2),
-                    this.totalPages - this.maxVisiblePages + 1
+                    props.currentPage - Math.floor(maxVisiblePages / 2),
+                    props.totalPages - maxVisiblePages + 1
                 )
             )
-        },
-        endPage() {
-            return Math.min(this.totalPages, this.startPage + this.maxVisiblePages - 1)
-        },
-        visiblePages() {
+        )
+
+        const endPage = computed(() =>
+            Math.min(props.totalPages, startPage.value + maxVisiblePages - 1)
+        )
+
+        const visiblePages = computed(() => {
             return Array.from(
-                { length: this.endPage - this.startPage + 1 },
-                (_, i) => this.startPage + i
+                { length: endPage.value - startPage.value + 1 },
+                (_, i) => startPage.value + i
             )
+        })
+
+        return {
+            startPage,
+            endPage,
+            visiblePages,
+            handlePageChange
         }
     }
 })
 </script>
-
-<style scoped>
-/* Add any styles specific to your pagination here */
-</style>

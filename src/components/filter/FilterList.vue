@@ -6,13 +6,16 @@ import FreeShipping from './freeshipping/FreeShipping.vue'
 import RatingFilter from './ratings/RatingFilter.vue'
 import PriceSlider from './priceslider/PriceSlider.vue'
 
+import ClearFilter from './ClearFilter.vue'
+
 export default defineComponent({
     components: {
         CategoryList,
         BrandList,
         FreeShipping,
         RatingFilter,
-        PriceSlider
+        PriceSlider,
+        ClearFilter
     },
     setup() {
         return {}
@@ -27,6 +30,7 @@ export default defineComponent({
                 <h2 className="text-2xl font-hind font-semibold text-black">
                     {{ $t('containerHeader') }}
                 </h2>
+                <ClearFilter />
             </div>
             <div className="filter-body">
                 <CategoryList />

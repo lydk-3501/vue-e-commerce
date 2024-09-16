@@ -25,5 +25,6 @@
     "nameOnCard": "Name on Card",
     "cardNumber": "Card Number",
     "expirationDate": "Expiration Date",
-    "checkOut": "Check Out"
+    "checkOut": "Check Out",
+    "hitsPerPage": " hits per page"
 }

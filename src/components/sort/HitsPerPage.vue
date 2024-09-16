@@ -49,11 +49,10 @@ export default defineComponent({
             isOpen.value = false
         }
 
-        // Define hits per page options with translation
-        const hitsPerPageOptions = computed<Record<HitsPerPageOptions, string>>(() => ({
-            16: t('hitsPerPage16'),
-            32: t('hitsPerPage32'),
-            64: t('hitsPerPage64')
+        const hitsPerPageOptions = computed<Record<HitsPerPageOptions, number>>(() => ({
+            16: 16,
+            32: 32,
+            64: 16
         }))
 
         return {
@@ -66,7 +65,3 @@ export default defineComponent({
     }
 })
 </script>
-
-<style scoped>
-/* Add your styles here */
-</style>

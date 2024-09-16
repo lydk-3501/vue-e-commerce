@@ -4,9 +4,10 @@ import { fetchProducts } from '@/api/api'
 import type { Product } from '@/api/api'
 
 export type SortCriteria = 'priceAsc' | 'priceDesc' | 'ratingAsc' | 'ratingDesc' | 'feature'
-export type HitsPerPage = 16 | 32 | 64 
+export type HitsPerPage = 16 | 32 | 64
 export const useProductStore = defineStore('product', () => {
     const products = ref<Product[]>([])
+    const searchedProducts = ref<Product[]>([])
     const brandCounts = ref<{ [key: string]: number }>({})
     const brandItems = ref<string[]>([])
     const ratingCounts = ref<Record<number, number>>({
@@ -20,10 +21,11 @@ export const useProductStore = defineStore('product', () => {
     const selectedBrands = ref<string[]>([])
     const priceRange = ref<[number, number]>([0, 4800])
     const selectedRating = ref<number | undefined>(undefined)
-    const sortBy = ref<SortCriteria>('feature') // Default sorting option
+    const sortBy = ref<SortCriteria>('feature')
     const isFreeShipping = ref<boolean>(false)
-    const hitsPerPage = ref<HitsPerPage>(16) // Default hits per page
+    const hitsPerPage = ref<HitsPerPage>(16)
     const currentPage = ref<number>(1)
+    const searchQuery = ref('')
 
     // Fetch products based on the current filters
     const fetchProductsAndComputeData = async () => {
@@ -31,7 +33,7 @@ export const useProductStore = defineStore('product', () => {
             const productData = await fetchProducts({
                 priceRange: priceRange.value,
                 freeShipping: isFreeShipping.value,
-                sortBy: sortBy.value,
+                sortBy: sortBy.value
             })
 
             // Update product list
@@ -76,32 +78,32 @@ export const useProductStore = defineStore('product', () => {
     const filteredProducts = computed(() => {
         let filtered = products.value.filter((product) => {
             const matchesBrand =
-                selectedBrands.value.length === 0 || selectedBrands.value.includes(product.brand);
+                selectedBrands.value.length === 0 || selectedBrands.value.includes(product.brand)
             const matchesRating =
-                selectedRating.value === 0 || Math.floor(product.rating) === selectedRating.value;
-            return matchesBrand && matchesRating;
-        });
+                selectedRating.value === 0 || Math.floor(product.rating) === selectedRating.value
+            return matchesBrand && matchesRating
+        })
 
         // Sort products based on selected sort criteria
         switch (sortBy.value) {
             case 'priceAsc':
-                filtered = filtered.sort((a, b) => a.price - b.price);
-                break;
+                filtered = filtered.sort((a, b) => a.price - b.price)
+                break
             case 'priceDesc':
-                filtered = filtered.sort((a, b) => b.price - a.price);
-                break;
+                filtered = filtered.sort((a, b) => b.price - a.price)
+                break
             case 'ratingAsc':
-                filtered = filtered.sort((a, b) => a.rating - b.rating);
-                break;
+                filtered = filtered.sort((a, b) => a.rating - b.rating)
+                break
             case 'ratingDesc':
-                filtered = filtered.sort((a, b) => b.rating - a.rating);
-                break;
+                filtered = filtered.sort((a, b) => b.rating - a.rating)
+                break
             case 'feature':
-                break;
+                break
         }
 
-        return filtered;
-    });
+        return filtered
+    })
 
     // Getter to filter and paginate products
     const paginatedProducts = computed(() => {
@@ -109,6 +111,10 @@ export const useProductStore = defineStore('product', () => {
         const end = start + hitsPerPage.value
         return filteredProducts.value.slice(start, end)
     })
+
+    const updateSearchQuery = (query: string) => {
+        searchQuery.value = query
+    }
 
     // Automatically fetch data when filters or sorting criteria are changed
     watch(
@@ -120,7 +126,8 @@ export const useProductStore = defineStore('product', () => {
             isFreeShipping,
             selectedRating,
             hitsPerPage,
-            currentPage
+            currentPage,
+            searchQuery
         ],
         () => {
             fetchProductsAndComputeData()
@@ -184,8 +191,8 @@ export const useProductStore = defineStore('product', () => {
         selectedCategories.value = []
         selectedBrands.value = []
         priceRange.value = [0, 4800]
-        sortBy.value = 'priceAsc' // Reset to default sorting option
-        currentPage.value = 1 // Reset to first page
+        isFreeShipping.value = false
+        selectedRating.value = 0
     }
 
     return {
@@ -213,6 +220,7 @@ export const useProductStore = defineStore('product', () => {
         setHitsPerPage,
         setCurrentPage,
         toggleFreeShipping,
-        clearFilters
+        clearFilters,
+        updateSearchQuery
     }
 })

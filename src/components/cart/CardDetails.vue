@@ -25,7 +25,7 @@ export default defineComponent({
                 <span class="text-xs text-gray-200 font-medium">****</span>
             </div>
             <div class="flex justify-between items-center mt-3">
-                <span class="text-xs text-gray-200">Giga Tamarashvili</span>
+                <span class="text-xs text-gray-200"></span>
                 <span class="text-xs text-gray-200">12/18</span>
             </div>
         </div>
@@ -46,7 +46,7 @@ export default defineComponent({
         <input
             type="text"
             class="focus:outline-none w-full h-6 bg-gray-800 text-white placeholder-gray-300 text-sm border-b border-gray-600 py-4"
-            placeholder="Giga Tamarashvili"
+            placeholder=""
         />
     </div>
 

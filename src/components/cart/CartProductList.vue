@@ -40,7 +40,7 @@ export default defineComponent({
 
             <div class="flex justify-center items-end">
                 <span class="text-sm font-medium text-gray-400 mr-1">{{ t('subtotal') }}:</span>
-                <span class="text-lg font-bold text-gray-800">{{ cartTotal }}</span>
+                <span class="text-lg font-bold text-gray-800">{{ cartTotal.toFixed(2) }}</span>
             </div>
         </div>
     </div>

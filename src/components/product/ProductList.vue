@@ -1,5 +1,6 @@
 <script lang="ts">
-import { defineComponent, computed } from 'vue'
+import { defineComponent, computed, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import ProductItem from './ProductItem.vue'
 import PaginationItems from '../pagination/PaginationItems.vue'
 import type { HitsPerPage } from '@/store/productStore'
@@ -11,7 +12,17 @@ export default defineComponent({
         PaginationItems
     },
     setup() {
+        const route = useRoute()
         const productStore = useProductStore()
+
+        watch(
+            () => route.query.q,
+            (newQuery) => {
+                if (typeof newQuery === 'string') {
+                    productStore.updateSearchQuery(newQuery)
+                }
+            }
+        )
 
         const products = computed(() => productStore.paginatedProducts)
         const totalPages = computed(() =>
@@ -19,6 +30,7 @@ export default defineComponent({
         )
         const currentPage = computed(() => productStore.currentPage)
         const hitsPerPage = computed(() => productStore.hitsPerPage)
+        const searchQuery = computed(() => (route.query.q as string) || '')
 
         const setPage = (page: number) => {
             productStore.setCurrentPage(page)
@@ -40,7 +52,8 @@ export default defineComponent({
             currentPage,
             hitsPerPage,
             setPage,
-            onHitsPerPageChange
+            onHitsPerPageChange,
+            searchQuery
         }
     }
 })
@@ -49,9 +62,14 @@ export default defineComponent({
 <template>
     <div>
         <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
-            <ProductItem v-for="(product, index) in products" :key="index" v-bind="product" />
+            <ProductItem
+                v-for="(product, index) in products"
+                :key="index"
+                v-bind="product"
+                :searchQuery="searchQuery"
+            />
         </div>
-        <footer className="flex justify-center my-16">
+        <footer class="flex justify-center my-16">
             <PaginationItems
                 :currentPage="currentPage"
                 :totalPages="totalPages"

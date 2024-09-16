@@ -12,6 +12,11 @@ export interface CartProductProps {
 export const useCartStore = defineStore('cart', () => {
     const cartProducts = ref<CartProductProps[]>([])
     const tempProduct = ref<CartProductProps | null>(null)
+    const isLogin = ref<boolean>(false)
+
+    const setLoginFlag = (flag: boolean) => {
+        isLogin.value = flag
+    }
 
     const addProductToCart = (product: CartProductProps) => {
         tempProduct.value = product
@@ -26,9 +31,9 @@ export const useCartStore = defineStore('cart', () => {
                 } else {
                     cartProducts.value.push({ ...tempProduct.value!, quantity: 1 })
                 }
-                tempProduct.value = null // Clear temporary product
+                tempProduct.value = null
             }
-        }, 500) // Delay for demo purposes
+        }, 500)
     }
 
     // Remove product from cart
@@ -47,7 +52,6 @@ export const useCartStore = defineStore('cart', () => {
         }
     }
 
-    // Get total price of the cart
     const cartTotal = computed(() => {
         return cartProducts.value.reduce(
             (total, product) => total + product.price * product.quantity,
@@ -55,18 +59,19 @@ export const useCartStore = defineStore('cart', () => {
         )
     })
 
-    // Get total number of items in cart
     const cartItemCount = computed(() => {
         return cartProducts.value.reduce((count, product) => count + product.quantity, 0)
     })
 
     return {
+        isLogin,
+        setLoginFlag,
         cartProducts,
         addProductToCart,
         removeProductFromCart,
         updateProductQuantity,
         cartTotal,
         cartItemCount,
-        tempProduct // Expose temporary product
+        tempProduct
     }
 })

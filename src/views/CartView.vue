@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, ref, onMounted, onUnmounted } from 'vue'
+import { defineComponent, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import CartProductList from '@/components/cart/CartProductList.vue'
 import CardDetails from '@/components/cart/CardDetails.vue'
@@ -12,19 +12,6 @@ export default defineComponent({
     setup() {
         const { t } = useI18n()
         const showCart = ref(true)
-        let timer: number | null = null
-
-        onMounted(() => {
-            timer = window.setTimeout(() => {
-                // Perform some async operation here
-            }, 3000)
-        })
-
-        onUnmounted(() => {
-            if (timer !== null) {
-                clearTimeout(timer)
-            }
-        })
 
         return {
             t,
