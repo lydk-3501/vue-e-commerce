@@ -1,0 +1,22 @@
+.container-wrapper {
+    display: block;
+}
+
+.filter-icon {
+    display: block;
+}
+
+@media (max-width: 1024px) {
+    .container-wrapper {
+        display: none;
+    }
+}
+
+@media (min-width: 1024px) {
+    .filter-icon {
+        display: none;
+    }
+    .filter-overlay {
+        display: none;
+    }
+}

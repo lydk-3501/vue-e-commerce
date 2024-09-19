@@ -2,10 +2,10 @@
 import { defineComponent, ref, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { fetchProducts } from '@/api/api'
 import BrandItem from './BrandItem.vue'
 import SearchItems from '@/components/search/SearchItems.vue'
 import SearchIcon from '@/components/icons/IconSearch.vue'
+import { useProductStore } from '@/store/productStore'
 
 export default defineComponent({
     name: 'BrandList',
@@ -16,13 +16,14 @@ export default defineComponent({
     },
     setup() {
         const { t } = useI18n()
-        const brandCounts = ref<{ [key: string]: number }>({})
-        const brandItems = ref<string[]>([])
+        const productStore = useProductStore()
+        const route = useRoute()
+        const router = useRouter()
         const placeholder = ref(t('brandSearchPlaceholder'))
         const searchQuery = ref('')
-        const selectedBrands = ref<string[]>([])
-        const router = useRouter()
-        const route = useRoute()
+        const selectedBrands = computed(() => productStore.$state.selectedBrands)
+        const brandItems = computed(() => productStore.brandItems)
+        const brandCounts = computed(() => productStore.brandCounts)
 
         const filteredBrands = computed(() => {
             const query = searchQuery.value.toLowerCase()
@@ -46,7 +47,7 @@ export default defineComponent({
                 }
             })
 
-            selectedBrands.value.forEach((brand, index) => {
+            productStore.selectedBrands.forEach((brand, index) => {
                 query[`brand[${index + 1}]`] = brand
             })
 
@@ -54,34 +55,18 @@ export default defineComponent({
         }
 
         const addBrand = (brand: string) => {
-            if (!selectedBrands.value.includes(brand)) {
-                selectedBrands.value.push(brand)
-                updateURL()
-            }
+            productStore.addBrand(brand)
+            updateURL()
         }
 
         const removeBrand = (brand: string) => {
-            selectedBrands.value = selectedBrands.value.filter((item) => item !== brand)
+            productStore.removeBrand(brand)
             updateURL()
         }
 
         onMounted(async () => {
             try {
-                const products = await fetchProducts()
-
-                const brandCountMap: { [key: string]: number } = {}
-
-                products.forEach((product) => {
-                    const brand = product.brand
-                    if (brandCountMap[brand]) {
-                        brandCountMap[brand]++
-                    } else {
-                        brandCountMap[brand] = 1
-                    }
-                })
-
-                brandItems.value = Object.keys(brandCountMap)
-                brandCounts.value = brandCountMap
+                await productStore.fetchProductsAndComputeData()
             } catch (error) {
                 console.error('Failed to fetch brand data:', error)
             }
@@ -90,19 +75,19 @@ export default defineComponent({
         return {
             t,
             sortedBrands,
-            brandCounts,
             placeholder,
             searchQuery,
-            selectedBrands,
             addBrand,
-            removeBrand
+            removeBrand,
+            selectedBrands,
+            brandCounts
         }
     }
 })
 </script>
 
 <template>
-    <div class="brand-menu border-t py-8 w-[260px]">
+    <div class="brand-menu border-t py-8 w-full">
         <div>
             <h2
                 class="brand-menu-header leading-normal font-semibold font-hind pb-4 text-[0.678rem] text-title tracking-[.08rem] uppercase"

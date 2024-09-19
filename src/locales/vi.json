@@ -15,5 +15,8 @@
     "ratingHeader": "Đánh giá",
     "hitsPerPages": " sản phẩm /trang",
     "yes": "Có",
-    "no": "Không"
+    "no": "Không",
+    "cartHeader": "Giỏ hàng",
+    "continueShopping": "Tiếp tục mua sắm",
+    "subtotal": "Tổng"
 }

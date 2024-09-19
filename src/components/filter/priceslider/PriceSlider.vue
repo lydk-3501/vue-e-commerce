@@ -1,8 +1,9 @@
 <script lang="ts">
-import { defineComponent, ref, computed, watch } from 'vue'
+import { defineComponent, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { debounce } from '@/utils/debounce'
+import { useProductStore } from '@/store/productStore'
 
 export default defineComponent({
     name: 'PriceRangeSlider',
@@ -14,10 +15,11 @@ export default defineComponent({
         const { t } = useI18n()
         const route = useRoute()
         const router = useRouter()
+        const productStore = useProductStore()
 
-        const values = ref<number[]>([
-            Number(route.query.priceMin) || props.min,
-            Number(route.query.priceMax) || props.max
+        const values = computed(() => [
+            productStore.$state.priceRange[0],
+            productStore.$state.priceRange[1]
         ])
 
         const trackStyle = computed(() => {
@@ -42,12 +44,13 @@ export default defineComponent({
         })
 
         const updateQueryParams = debounce(() => {
+            productStore.updatePriceRange(values.value[0], values.value[1])
             if (values.value[0] !== props.min || values.value[1] !== props.max) {
                 router.push({
                     query: { ...route.query, priceMin: values.value[0], priceMax: values.value[1] }
                 })
             }
-        }, 500)
+        }, 300)
 
         const startDrag = (index: number) => {
             const updateValue = (event: MouseEvent | TouchEvent) => {
@@ -82,14 +85,14 @@ export default defineComponent({
         watch(
             () => route.query.priceMin,
             (newMin) => {
-                values.value[0] = Number(newMin) || props.min
+                productStore.priceRange[0] = Number(newMin) || props.min
             }
         )
 
         watch(
             () => route.query.priceMax,
             (newMax) => {
-                values.value[1] = Number(newMax) || props.max
+                productStore.priceRange[1] = Number(newMax) || props.max
             }
         )
 
@@ -105,7 +108,7 @@ export default defineComponent({
 </script>
 
 <template>
-    <div class="w-[260px] border-t py-8">
+    <div class="w-full border-t py-8">
         <h2
             class="slider-header font-hind font-semibold leading-normal pb-4 text-[0.678rem] text-title tracking-[.08rem] uppercase"
         >
@@ -122,10 +125,15 @@ export default defineComponent({
                 @touchstart="startDrag(index)"
             />
         </div>
-
         <div class="flex justify-between mt-2 text-sm text-black">
-            <span>${{ values[0] }}</span>
-            <span>${{ values[1] }}</span>
+            <span class="font-semibold">
+                <span class="text-amber-500">$</span>
+                {{ values[0] }}
+            </span>
+            <span class="font-semibold">
+                <span class="text-amber-500">$</span>
+                {{ values[1] }}
+            </span>
         </div>
     </div>
 </template>

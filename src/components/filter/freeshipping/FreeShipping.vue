@@ -1,34 +1,41 @@
 <script lang="ts">
-import { defineComponent, ref, watch } from 'vue'
+import { defineComponent, watch, onMounted, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
+import { useProductStore } from '@/store/productStore'
 
 export default defineComponent({
     name: 'FreeShipping',
     setup() {
         const { t } = useI18n()
-        const isFreeShipping = ref(false)
-
         const route = useRoute()
         const router = useRouter()
+        const isFreeShipping = computed(() => productStore.$state.isFreeShipping)
 
-        if (route.query.freeShipping === 'true') {
-            isFreeShipping.value = true
-        }
+        const productStore = useProductStore()
+
+        onMounted(() => {
+            if (route.query.freeShipping === 'true') {
+                productStore.isFreeShipping = true
+            }
+        })
+
+        watch(
+            () => productStore.isFreeShipping,
+            (newValue) => {
+                const query = { ...route.query }
+                if (newValue) {
+                    query.freeShipping = 'true'
+                } else {
+                    delete query.freeShipping
+                }
+                router.push({ query })
+            }
+        )
 
         const handleToggle = () => {
-            isFreeShipping.value = !isFreeShipping.value
+            productStore.toggleFreeShipping()
         }
-
-        watch(isFreeShipping, (newValue) => {
-            const query = { ...route.query }
-            if (newValue) {
-                query.freeShipping = 'true'
-            } else {
-                delete query.freeShipping
-            }
-            router.push({ query })
-        })
 
         return {
             t,
@@ -40,7 +47,7 @@ export default defineComponent({
 </script>
 
 <template>
-    <div class="w-[260px] border-t py-8">
+    <div class="w-full border-t py-8">
         <h2
             class="freeshipping-header font-hind font-semibold leading-normal pb-4 text-[0.678rem] text-title tracking-[.08rem] uppercase"
         >
